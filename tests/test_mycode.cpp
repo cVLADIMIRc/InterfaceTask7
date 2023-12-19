@@ -7,21 +7,39 @@ using namespace std;
 class TestMyCode: public QObject {
     Q_OBJECT
 private slots:
-    void testIvan();
+    // Тест, проверяющий приветствие по имени
+    void testHelloWithName() {
+        stringstream input;
+        stringstream output;
+        input << "Alice";
+
+        hello(input, output);
+
+        QCOMPARE(output.str(), string("hello Alice"));
+    }
+
+    // Тест, проверяющий приветствие для пустой строки
+    void testHelloWithEmptyName() {
+        stringstream input;
+        stringstream output;
+        input << "";
+
+        hello(input, output);
+
+        QCOMPARE(output.str(), string("Извините, имя не было введено."));
+    }
+
+    // Тест, проверяющий специальное приветствие для имени "Вася"
+    void testHelloWithNameVasya() {
+        stringstream input;
+        stringstream output;
+        input << "Вася";
+
+        hello(input, output);
+
+        QCOMPARE(output.str(), string("Привет, Вася!"));
+    }
 };
-
-void TestMyCode::testIvan() {
-    std::stringstream sstr;
-    stringstream isst;
-    isst << "Ivan";
-
-    hello(isst, sstr);
-
-    string str;
-    getline(sstr, str);
-
-    QCOMPARE(str == "hello Ivan", true);
-}
 
 QTEST_MAIN(TestMyCode)
 #include "test_mycode.moc"
