@@ -1,5 +1,6 @@
 #ifndef FORM_H
 #define FORM_H
+#include "ui_form.h"
 
 #include <QWidget>
 
@@ -12,14 +13,12 @@ class Form : public QWidget
     Q_OBJECT
 
 public:
+    Ui::Form *ui;
     explicit Form(QWidget *parent = nullptr);
     ~Form();
 
 public slots:
     void start();
-
-private:
-    Ui::Form *ui;
 };
 
 #endif // FORM_H
