@@ -20,5 +20,13 @@ void Form::start() {
     QString str = ui->str->text();
     QString sub_str = ui->sub_str->text();
 
-    ui->result->setText("result.....");
+    // Поиск подстроки в строке
+    bool found = str.contains(sub_str, Qt::CaseInsensitive); // Игнорирование регистра при поиске
+
+    // Вывод результата
+    if (found) {
+        ui->result->setText("yes");
+    } else {
+        ui->result->setText("no");
+    }
 }
