@@ -10,6 +10,7 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += \
+    LevelsFacade.cpp \
     bigint.cpp\
     form.cpp \
     main.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 HEADERS += \
     bigint.hpp \
     form.h \
+    levelsfacade.h \
     mycode.h
 
 FORMS += \
