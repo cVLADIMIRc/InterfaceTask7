@@ -1,5 +1,6 @@
+#include <QApplication>
+#include <QDebug>
 #include "form.h"
-#include "ui_form.h"
 
 // 0. Положить проект в git, дописать код в form.cpp,
 //       оформить в виде отдельного коммита
@@ -10,32 +11,19 @@
 //      (код из предыдущей работы поместить в еще одну ветку)
 // { в качестве ответа на задание крепим ссылку на публичный
 //   git-репозиторий }
-Form::Form(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Form)
-{
-    ui->setupUi(this);
 
-    connect(ui->pushButton, SIGNAL(clicked()),
-            this, SLOT(start()));
-}
+using namespace std;
 
-Form::~Form()
-{
-    delete ui;
-}
+int main(int argc, char *argv[]) {
+  QApplication app(argc, argv);
 
-void Form::start() {
-    QString str = ui->str->text();
-    QString sub_str = ui->sub_str->text();
 
-    // Поиск подстроки в строке
-    bool found = str.contains(sub_str, Qt::CaseInsensitive); // Игнорирование регистра при поиске
+  //hello(cin, cout);
 
-    // Вывод результата
-    if (found) {
-        ui->result->setText("yes");
-    } else {
-        ui->result->setText("no");
-    }
+  Form f;
+  f.show();
+
+
+
+  return app.exec();
 }
