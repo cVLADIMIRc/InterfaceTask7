@@ -16,7 +16,11 @@ HEADERS += \
 
 SOURCES += \
     ../src/form.cpp \
-    test_mycode.cpp
+    test_mycode.cpp \
+    ../src/boyermoresearch.cpp \
+    ../src/mycode.cpp
+
+
 
 FORMS += \
     ../src/form.ui

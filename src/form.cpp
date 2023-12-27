@@ -1,5 +1,9 @@
 #include "form.h"
-#include "boyer.h"
+#include "qdebug.h"
+#include "qelapsedtimer.h"
+#include "ui_Form.h"
+#include "boyermoresearch.h"
+#include "QVector"
 
 Form::Form(QWidget *parent) :
     QWidget(parent),
@@ -19,83 +23,49 @@ Form::~Form()
 void Form::start() {
     QString str = ui->str->text();
     QString sub_str = ui->sub_str->text();
-    int res;
 
-    res = find(str, sub_str);
+    QElapsedTimer timer;
+    timer.start();
 
-    // Поиск подстроки в строке
-    // bool found = str.contains(sub_str, Qt::CaseInsensitive); // Игнорирование регистра при поиске
+    QVector<int> bmResult = search(str, sub_str);
 
-    bool found = (res != -1);
-    // Вывод результата
-    if (found) {
-        ui->result->setText("yes");
+    qint64 bmElapsedNanos = timer.nsecsElapsed();
+    timer.restart();
+
+    QVector<int> idxResult;
+    int pos = 0;
+    while ((pos = str.indexOf(sub_str, pos)) != -1) {
+        idxResult.append(pos);
+        pos += sub_str.size();
+    }
+
+    qint64 idxElapsedNanos = timer.nsecsElapsed();
+
+    if (bmResult.isEmpty() && idxResult.isEmpty()) {
+        ui->result->setText("Substring not found");
     } else {
-        ui->result->setText("no");
+        QString resultString;
+        for (int i : idxResult) {
+            resultString.append(QString::number(i) + " ");
+        }
+        ui->result->setText(resultString);
+        qDebug() << "Time taken by Boyer-Moore: " << bmElapsedNanos << " ns";
+            qDebug() << "Time taken by indexOf: " << idxElapsedNanos << " ns";
     }
 }
 
-QVector<int> Form::prefix_func(const QString &s) {
-    QVector<int> p(s.length());
-
-    int k = 0;
-    p[0] = 0;
-    for (int i = 1; i < s.length(); ++i) {
-        while (k > 0 && s[k] != s[i]) {
-            k = p[k - 1];
-        }
-        if (s[k] == s[i]) {
-            ++k;
-        }
-        p[i] = k;
-    }
-    return p;
+QLineEdit* Form::getTextLineEdit() const{
+    return ui->str;
 }
 
-int Form::find(const QString &s, const QString &t) {
-    if (s.length() < t.length()) {
-        return -1;
-    }
+QLineEdit* Form::getSubStringLineEdit() const{
+    return ui->sub_str;
+}
 
-    if (t.isEmpty()) {
-        return s.length();
-    }
+QPushButton* Form::getSearchButton() const{
+    return ui->pushButton;
+}
 
-    QMap<QChar, int> stop_table;
-    QMap<int, int> suffics_table;
-
-    for (int i = 0; i < t.length(); ++i) {
-        stop_table[t[i]] = i;
-    }
-
-    QString rt(t);
-    std::reverse(rt.begin(), rt.end());
-    QVector<int> p = prefix_func(t), pr = prefix_func(rt);
-    for (int i = 0; i < t.length() + 1; ++i) {
-        suffics_table[i] = t.length() - p.back();
-    }
-
-    for (int i = 1; i < t.length(); ++i) {
-        int j = pr[i];
-        suffics_table[j] = std::min(suffics_table[j], i - pr[i] + 1);
-    }
-
-    for (int shift = 0; shift <= s.length() - t.length();) {
-        int pos = t.length() - 1;
-
-        while (t[pos] == s[pos + shift]) {
-            if (pos == 0) return shift;
-            --pos;
-        }
-
-        if (pos == t.length() - 1) {
-            QMap<QChar, int>::const_iterator stop_symbol = stop_table.find(s[pos + shift]);
-            int stop_symbol_additional = pos - (stop_symbol != stop_table.end() ? stop_symbol.value() : -1);
-            shift += stop_symbol_additional;
-        } else {
-            shift += suffics_table[t.length() - pos - 1];
-        }
-    }
-
-    return -1;
+QLabel* Form::getResultLabel() const{
+    return ui->result;
 }
