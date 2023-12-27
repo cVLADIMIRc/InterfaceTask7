@@ -3,6 +3,8 @@
 #include "ui_form.h"
 
 #include <QWidget>
+#include <QMap>
+#include <QVector>
 
 namespace Ui {
 class Form;
@@ -19,6 +21,11 @@ public:
 
 public slots:
     void start();
+
+private:
+
+    QVector<int> prefix_func(const QString &s);
+    int find(const QString &s, const QString &t);
 };
 
 #endif // FORM_H

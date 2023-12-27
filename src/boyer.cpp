@@ -1,41 +1,9 @@
-#include "form.h"
+// substring_search.cpp
 #include "boyer.h"
+#include "form.h"
+#include <algorithm>
 
-Form::Form(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Form)
-{
-    ui->setupUi(this);
-
-    connect(ui->pushButton, SIGNAL(clicked()),
-            this, SLOT(start()));
-}
-
-Form::~Form()
-{
-    delete ui;
-}
-
-void Form::start() {
-    QString str = ui->str->text();
-    QString sub_str = ui->sub_str->text();
-    int res;
-
-    res = find(str, sub_str);
-
-    // Поиск подстроки в строке
-    // bool found = str.contains(sub_str, Qt::CaseInsensitive); // Игнорирование регистра при поиске
-
-    bool found = (res != -1);
-    // Вывод результата
-    if (found) {
-        ui->result->setText("yes");
-    } else {
-        ui->result->setText("no");
-    }
-}
-
-QVector<int> Form::prefix_func(const QString &s) {
+QVector<int> prefix_func(const QString &s) {
     QVector<int> p(s.length());
 
     int k = 0;
@@ -52,7 +20,7 @@ QVector<int> Form::prefix_func(const QString &s) {
     return p;
 }
 
-int Form::find(const QString &s, const QString &t) {
+int finddd(const QString &s, const QString &t) {
     if (s.length() < t.length()) {
         return -1;
     }
